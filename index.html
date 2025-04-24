@@ -2,71 +2,86 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8">
-  <title>Klint Opgangsfarver</title>
+  <title>Klint Farvevælger</title>
   <style>
     body {
       font-family: sans-serif;
-      margin: 0;
+      padding: 2rem;
       background: #f0f0f0;
-      padding: 1rem;
     }
-
+    h1, h2 {
+      text-align: center;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
     .container {
       position: relative;
       max-width: 500px;
       margin: 0 auto;
     }
-
     img {
       width: 100%;
       display: block;
     }
-
     .overlay {
       position: absolute;
       left: 0;
       width: 100%;
       pointer-events: none;
     }
-
     .top {
       top: 0;
       height: 48%;
       border-bottom: 2px solid #fff;
     }
-
     .bottom {
       bottom: 0;
       height: 52%;
       border-top: 2px solid #fff;
     }
-
-    .controls {
-      display: flex;
-      gap: 1rem;
-      margin: 1rem 0;
-      justify-content: center;
+    svg {
+      width: 200px;
+      height: auto;
+      border: 1px solid #ccc;
+      display: block;
+      margin: 1rem auto;
     }
-
-    select {
-      padding: 0.5rem;
-      font-size: 1rem;
+    .form-container {
+      text-align: center;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
 
-<h2 style="text-align:center;">Vælg Klint-farver til opgangen</h2>
 
+    <div class="form-container">
+        <h2>Vælg farver til SVG-billede</h2>
+        <label for="topColor">Øverste halvdel:</label>
+        <select id="topColor"></select>
+      
+        <label for="bottomColor">Nederste halvdel:</label>
+        <select id="bottomColor"></select>
+      </div>
+<!-- SVG at the top and centered -->
+<svg viewBox="0 0 200 200">
+  <rect id="topHalf" x="0" y="0" width="200" height="100" fill="#f9f7f2" />
+  <rect id="bottomHalf" x="0" y="100" width="200" height="100" fill="#f9f7f2" />
+</svg>
+<h1>Vælg farver til opgangen</h1>
 <div class="controls">
-  <label>
-    Øverste væg:
-    <select id="colorTop"></select>
-  </label>
-  <label>
-    Nederste væg:
-    <select id="colorBottom"></select>
-  </label>
+  <label for="colorTop">Øverste væg (Opgang):</label>
+  <select id="colorTop"></select>
+  <label for="colorBottom">Nederste væg (Opgang):</label>
+  <select id="colorBottom"></select>
 </div>
 
 <div class="container">
@@ -75,36 +90,40 @@
   <div class="overlay bottom" id="overlayBottom"></div>
 </div>
 
+
+
 <script>
-   const colors = {
-      "Pippi": "#f4c7ab",
-      "Limon": "#f6e27f",
-      "Belle": "#eddccf",
-      "Cashmere": "#d9c7b5",
-      "Radiance": "#f0e8c2",
-      "Sauvignon": "#f1e7dd",
-      "Sunroom": "#fcebb2",
-      "Fairy": "#f8d8e1",
-      "Lungo": "#c0a88b",
-      "Serene": "#c1c7b0",
-      "Buttercup": "#f1c93f",
-      "Honey bee": "#e3b73c",
-      "Clay": "#c9a185",
-      "Terracotta": "#cb6d51",
-      "Rioja": "#992f2d",
-      "Sketch for summer": "#ead5a5",
-      "Boston": "#7c574d",
-      "Chocolat": "#5a3b2e",
-      "Cedar": "#926a4a",
-      "Tapenade": "#99814a",
-      "Santa Fe": "#c77966",
-      "Buster": "#726658",
-      "Dingo": "#9f8563",
-      "Merino": "#f3efe6"
-    };
+  const colors = {
+    "Pippi": "#f4c7ab",
+    "Limon": "#f6e27f",
+    "Belle": "#eddccf",
+    "Cashmere": "#d9c7b5",
+    "Radiance": "#f0e8c2",
+    "Sauvignon": "#f1e7dd",
+    "Sunroom": "#fcebb2",
+    "Fairy": "#f8d8e1",
+    "Lungo": "#c0a88b",
+    "Serene": "#c1c7b0",
+    "Buttercup": "#f1c93f",
+    "Honey bee": "#e3b73c",
+    "Clay": "#c9a185",
+    "Terracotta": "#cb6d51",
+    "Rioja": "#992f2d",
+    "Sketch for summer": "#ead5a5",
+    "Boston": "#7c574d",
+    "Chocolat": "#5a3b2e",
+    "Cedar": "#926a4a",
+    "Tapenade": "#99814a",
+    "Santa Fe": "#c77966",
+    "Buster": "#726658",
+    "Dingo": "#9f8563",
+    "Merino": "#f3efe6"
+  };
 
   const selectTop = document.getElementById("colorTop");
   const selectBottom = document.getElementById("colorBottom");
+  const selectTopSVG = document.getElementById("topColor");
+  const selectBottomSVG = document.getElementById("bottomColor");
 
   function createOptions(select) {
     for (const [name, hex] of Object.entries(colors)) {
@@ -117,19 +136,28 @@
 
   createOptions(selectTop);
   createOptions(selectBottom);
+  createOptions(selectTopSVG);
+  createOptions(selectBottomSVG);
 
   function updateColors() {
     document.getElementById("overlayTop").style.background = selectTop.value;
     document.getElementById("overlayTop").style.opacity = 0.65;
     document.getElementById("overlayBottom").style.background = selectBottom.value;
     document.getElementById("overlayBottom").style.opacity = 0.65;
+
+    document.getElementById("topHalf").setAttribute("fill", selectTopSVG.value);
+    document.getElementById("bottomHalf").setAttribute("fill", selectBottomSVG.value);
   }
 
   selectTop.addEventListener("change", updateColors);
   selectBottom.addEventListener("change", updateColors);
+  selectTopSVG.addEventListener("change", updateColors);
+  selectBottomSVG.addEventListener("change", updateColors);
 
   selectTop.selectedIndex = 0;
   selectBottom.selectedIndex = 1;
+  selectTopSVG.selectedIndex = 0;
+  selectBottomSVG.selectedIndex = 1;
   updateColors();
 </script>
 
