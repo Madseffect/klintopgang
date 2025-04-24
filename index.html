@@ -2,98 +2,79 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8">
-  <title>Klint Farvekombinationer</title>
+  <title>Klint Farvevælger</title>
   <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-    }
-    label, select {
-      display: block;
-      margin-bottom: 1rem;
-    }
-    .color-box {
-      width: 100%;
-      height: 150px;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-weight: bold;
-      font-size: 1rem;
-    }
+    body { font-family: sans-serif; padding: 2rem; }
+    select { margin-bottom: 1rem; display: block; }
+    svg { width: 300px; height: auto; border: 1px solid #ccc; display: block; margin-top: 1rem; }
   </style>
 </head>
 <body>
+  <h1>Vælg farver til opgangen</h1>
 
-  <h1>Vælg to Klint-farver</h1>
+  <label for="topColor">Øverste halvdel:</label>
+  <select id="topColor"></select>
 
-  <label for="color1">Farve 1 (øverste boks):</label>
-  <select id="color1"></select>
+  <label for="bottomColor">Nederste halvdel:</label>
+  <select id="bottomColor"></select>
 
-  <label for="color2">Farve 2 (nederste boks):</label>
-  <select id="color2"></select>
-
-  <div class="color-box" id="box1">Farve 1</div>
-  <div class="color-box" id="box2">Farve 2</div>
+  <svg viewBox="0 0 200 200">
+    <!-- Øverste halvdel -->
+    <rect id="topHalf" x="0" y="0" width="200" height="100" fill="#f9f7f2" />
+    <!-- Nederste halvdel -->
+    <rect id="bottomHalf" x="0" y="100" width="200" height="100" fill="#f9f7f2" />
+  </svg>
 
   <script>
     const colors = {
-      "Klint Hvid": "#f9f7f2",
-      "Klint Støvblå": "#a0b2c4",
-      "Klint Sand": "#d6c4a3",
-      "Klint Okker": "#b88936",
-      "Klint Mørkeblå": "#2c3e50",
-      "Klint Rosa": "#e4b6aa",
-      "Klint Lys Grå": "#d2d2d2",
-      "Klint Mørk Grå": "#7a7a7a",
-      "Klint Salvie": "#a8b4a5",
-      "Klint Terrakotta": "#c37a5d",
-      "Klint Gul": "#f3cf5b",
-      "Klint Blomme": "#5c2e4d",
-      "Klint Lavendel": "#c8b6d4",
-      "Klint Aubergine": "#3b1830",
-      "Klint Kastanje": "#5c2f24",
-      "Klint Teal": "#497d7d",
-      "Klint Dyb Grøn": "#2e4731",
-      "Klint Lys Mint": "#cbe2d6",
-      "Klint Beige": "#e2d6c4",
-      "Klint Mørk Brun": "#4b3d32"
+      "Pippi": "#f4c7ab",
+      "Limon": "#f6e27f",
+      "Belle": "#eddccf",
+      "Cashmere": "#d9c7b5",
+      "Radiance": "#f0e8c2",
+      "Sauvignon": "#f1e7dd",
+      "Sunroom": "#fcebb2",
+      "Fairy": "#f8d8e1",
+      "Lungo": "#c0a88b",
+      "Serene": "#c1c7b0",
+      "Buttercup": "#f1c93f",
+      "Honey bee": "#e3b73c",
+      "Clay": "#c9a185",
+      "Terracotta": "#cb6d51",
+      "Rioja": "#992f2d",
+      "Sketch for summer": "#ead5a5",
+      "Boston": "#7c574d",
+      "Chocolat": "#5a3b2e",
+      "Cedar": "#926a4a",
+      "Tapenade": "#99814a",
+      "Santa Fe": "#c77966",
+      "Buster": "#726658",
+      "Dingo": "#9f8563",
+      "Merino": "#f3efe6"
     };
 
-    const select1 = document.getElementById("color1");
-    const select2 = document.getElementById("color2");
-    const box1 = document.getElementById("box1");
-    const box2 = document.getElementById("box2");
+    const selectTop = document.getElementById("topColor");
+    const selectBottom = document.getElementById("bottomColor");
 
-    for (let name in colors) {
-      const opt1 = document.createElement("option");
-      const opt2 = document.createElement("option");
-      opt1.value = colors[name];
-      opt1.textContent = name;
-      opt2.value = colors[name];
-      opt2.textContent = name;
-      select1.appendChild(opt1);
-      select2.appendChild(opt2);
+    Object.entries(colors).forEach(([name, hex]) => {
+      const opt = document.createElement("option");
+      opt.value = hex;
+      opt.textContent = name;
+      selectTop.appendChild(opt.cloneNode(true));
+      selectBottom.appendChild(opt.cloneNode(true));
+    });
+
+    function updateColors() {
+      document.getElementById("topHalf").setAttribute("fill", selectTop.value);
+      document.getElementById("bottomHalf").setAttribute("fill", selectBottom.value);
     }
 
-    function updateBoxes() {
-      box1.style.backgroundColor = select1.value;
-      box2.style.backgroundColor = select2.value;
-      box1.textContent = select1.options[select1.selectedIndex].text;
-      box2.textContent = select2.options[select2.selectedIndex].text;
-    }
+    selectTop.addEventListener("change", updateColors);
+    selectBottom.addEventListener("change", updateColors);
 
-    select1.addEventListener("change", updateBoxes);
-    select2.addEventListener("change", updateBoxes);
-
-    select1.selectedIndex = 0;
-    select2.selectedIndex = 1;
-    updateBoxes();
+    selectTop.selectedIndex = 0;
+    selectBottom.selectedIndex = 1;
+    updateColors();
   </script>
-
 </body>
 </html>
