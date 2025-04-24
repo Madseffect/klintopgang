@@ -2,31 +2,81 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8">
-  <title>Klint Farvevælger</title>
+  <title>Klint Opgangsfarver</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    select { margin-bottom: 1rem; display: block; }
-    svg { width: 300px; height: auto; border: 1px solid #ccc; display: block; margin-top: 1rem; }
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f0f0f0;
+      padding: 1rem;
+    }
+
+    .container {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .top {
+      top: 0;
+      height: 48%;
+      border-bottom: 2px solid #fff;
+    }
+
+    .bottom {
+      bottom: 0;
+      height: 52%;
+      border-top: 2px solid #fff;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      justify-content: center;
+    }
+
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>Vælg farver til opgangen</h1>
 
-  <label for="topColor">Øverste halvdel:</label>
-  <select id="topColor"></select>
+<h2 style="text-align:center;">Vælg Klint-farver til opgangen</h2>
 
-  <label for="bottomColor">Nederste halvdel:</label>
-  <select id="bottomColor"></select>
+<div class="controls">
+  <label>
+    Øverste væg:
+    <select id="colorTop"></select>
+  </label>
+  <label>
+    Nederste væg:
+    <select id="colorBottom"></select>
+  </label>
+</div>
 
-  <svg viewBox="0 0 200 200">
-    <!-- Øverste halvdel -->
-    <rect id="topHalf" x="0" y="0" width="200" height="100" fill="#f9f7f2" />
-    <!-- Nederste halvdel -->
-    <rect id="bottomHalf" x="0" y="100" width="200" height="100" fill="#f9f7f2" />
-  </svg>
+<div class="container">
+  <img src="opgang.jpg" alt="Opgang">
+  <div class="overlay top" id="overlayTop"></div>
+  <div class="overlay bottom" id="overlayBottom"></div>
+</div>
 
-  <script>
-    const colors = {
+<script>
+   const colors = {
       "Pippi": "#f4c7ab",
       "Limon": "#f6e27f",
       "Belle": "#eddccf",
@@ -53,28 +103,35 @@
       "Merino": "#f3efe6"
     };
 
-    const selectTop = document.getElementById("topColor");
-    const selectBottom = document.getElementById("bottomColor");
+  const selectTop = document.getElementById("colorTop");
+  const selectBottom = document.getElementById("colorBottom");
 
-    Object.entries(colors).forEach(([name, hex]) => {
+  function createOptions(select) {
+    for (const [name, hex] of Object.entries(colors)) {
       const opt = document.createElement("option");
       opt.value = hex;
       opt.textContent = name;
-      selectTop.appendChild(opt.cloneNode(true));
-      selectBottom.appendChild(opt.cloneNode(true));
-    });
-
-    function updateColors() {
-      document.getElementById("topHalf").setAttribute("fill", selectTop.value);
-      document.getElementById("bottomHalf").setAttribute("fill", selectBottom.value);
+      select.appendChild(opt);
     }
+  }
 
-    selectTop.addEventListener("change", updateColors);
-    selectBottom.addEventListener("change", updateColors);
+  createOptions(selectTop);
+  createOptions(selectBottom);
 
-    selectTop.selectedIndex = 0;
-    selectBottom.selectedIndex = 1;
-    updateColors();
-  </script>
+  function updateColors() {
+    document.getElementById("overlayTop").style.background = selectTop.value;
+    document.getElementById("overlayTop").style.opacity = 0.65;
+    document.getElementById("overlayBottom").style.background = selectBottom.value;
+    document.getElementById("overlayBottom").style.opacity = 0.65;
+  }
+
+  selectTop.addEventListener("change", updateColors);
+  selectBottom.addEventListener("change", updateColors);
+
+  selectTop.selectedIndex = 0;
+  selectBottom.selectedIndex = 1;
+  updateColors();
+</script>
+
 </body>
 </html>
